@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Podcast Clip Generator</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><h1>Podcast Clip Generator</h1>
+<p>Split a long video into consecutive 60-second clips. Processing happens in your browser; nothing is uploaded.</p></header>
+<main>
+<section id="drop" class="drop" tabindex="0">
+  <p class="big">Drag &amp; drop a video here</p><p>or</p>
+  <button id="browse" class="btn primary" type="button">Browse Files</button>
+  <input id="file" type="file" accept="video/*,.mp4,.mov,.m4v,.mkv,.webm" hidden>
+</section>
+
+<section id="panel" hidden>
+  <div class="info">
+    <video id="preview" controls preload="metadata"></video>
+    <dl>
+      <dt>File</dt><dd id="fName"></dd>
+      <dt>Size</dt><dd id="fSize"></dd>
+      <dt>Duration</dt><dd id="fDur"></dd>
+      <dt>Clip length</dt><dd><span class="badge">60 s</span> (last clip may be shorter)</dd>
+      <dt>Clips to generate</dt><dd id="fTotal"></dd>
+    </dl>
+  </div>
+
+  <div class="opts">
+    <label>Format
+      <select id="format"><option value="orig">Original aspect ratio</option><option value="vert">Vertical 9:16 (Reels)</option></select></label>
+    <label id="vmodeL" hidden>Vertical mode
+      <select id="vmode"><option value="crop">Center-crop (fills frame)</option><option value="fit">Fit inside canvas (no cropping)</option></select></label>
+    <label id="resL" hidden>Resolution
+      <select id="res"><option value="1080x1920">1080 × 1920 (slower)</option><option value="720x1280">720 × 1280 (faster)</option></select></label>
+    <label>Method
+      <select id="method"><option value="copy">Fast: stream copy (no re-encode, keyframe-approximate cuts)</option><option value="encode">Accurate: re-encode H.264/AAC (exact cuts, very slow)</option></select></label>
+  </div>
+  <p class="hint" id="hint"></p>
+
+  <div class="actions">
+    <button id="start" class="btn primary" type="button">Start Processing</button>
+    <button id="cancel" class="btn" type="button" hidden>Cancel</button>
+    <button id="retry" class="btn" type="button" hidden>Try Again</button>
+    <button id="clear" class="btn danger" type="button">Clear Video</button>
+  </div>
+
+  <div class="progress" aria-live="polite">
+    <div class="bar"><div id="barFill"></div></div>
+    <div class="stats"><span id="pct">0%</span><span id="count">0 / 0 clips</span><span id="eta"></span></div>
+  </div>
+  <div id="status" role="status"></div>
+
+  <div class="zipbar"><button id="zip" class="btn primary" type="button" disabled>Download All as ZIP</button></div>
+  <ul id="clips" class="clips"></ul>
+</section>
+</main>
+<footer>FFmpeg.wasm (single-thread core) · ZIP built in-browser (store-only) · see README.md for limits</footer>
+<script src="app.js"></script>
+</body>
+</html>
